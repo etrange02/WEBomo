@@ -1,0 +1,42 @@
+<!DOCTYPE html> 
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]--> 
+<html class="no-js" lang="en" > 
+<head> 
+<meta charset="utf-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Index</title>
+<!-- If you are using CSS version, only link these 2 files, you may add app.css to use for your overrides if you like. --> 
+<link rel="stylesheet" href="css/normalize.css"> 
+<link rel="stylesheet" href="css/foundation.css"> 
+<script src="js/vendor/modernizr.js"></script> 
+<script type="text/javascript">
+function reset () {
+	document.getElementById("login").setAttribute("value", "");
+	document.getElementById("password").setAttribute("value", "");
+	}
+</script>
+</head> 
+<body> 
+
+<h2>Connexion</h2>
+	<form data-abide action="LoginServlet" method="post">
+			<div class="input-wrapper">
+				<label for="idlogin">Login</label>
+				<input type="text" name="login" id="idlogin" required>
+				<small class="error">Login is required.</small>
+			</div>
+			<div class="input-wrapper">
+				<label for="idPassword">Password <small>(6 characters minimum)</small></label>
+				<input type="password" name="password" id="idPassword" required>
+				<small class="error">Password is required.</small>
+			</div>
+			<input type="submit" value="Valider" class="button small success"/>
+			<input type="button" value="Reset" onclick="reset();" class="button small alert"/>
+	</form>
+
+<script src="js/vendor/jquery.js"></script>
+<script src="js/foundation/foundation.js"></script>
+<script src="js/foundation/foundation.abide.js"></script>
+<script> $(document).foundation(); </script> 
+</body> 
+</html>
