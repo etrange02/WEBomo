@@ -19,7 +19,7 @@ import entity.Contact;
 public class RemoveContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	@EJB(name="DAOContact")
+	@EJB(name="DAOContactBean")
 	private IDAOContactLocal dao;
        
     /**

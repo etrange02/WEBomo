@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +26,7 @@ import entity.ContactGroup;
 public class SearchContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	@EJB(name="DAOContact")
+	@EJB(name="DAOContactBean")
 	private IDAOContactLocal dao;
        
     /**
@@ -48,6 +51,14 @@ public class SearchContactServlet extends HttpServlet {
 		List<Contact> lc = new ArrayList<Contact>();
 		
 		if (request.getParameter("criteria").isEmpty()) {
+			Context context = null;
+			try {
+				context = new InitialContext();
+			dao = (IDAOContactLocal) context.lookup("DAOContactBean");
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			lc = dao.GetAllContacts();
 		} else {
 			List<Contact> lc1 = dao.searchContactByName(request.getParameter("criteria"));		

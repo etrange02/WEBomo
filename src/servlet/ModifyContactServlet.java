@@ -20,10 +20,10 @@ import session.*;
 public class ModifyContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	@EJB(name="DAOContact")
+	@EJB(name="DAOContactBean")
 	private IDAOContactLocal dao;
 	
-	@EJB(name="DAOContactGroup")
+	@EJB(name="DAOContactGroupBean")
 	private IDAOContactGroupLocal daoGroup;
 	
     /**
