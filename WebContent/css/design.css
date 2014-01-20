@@ -1,0 +1,36 @@
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	background-color: #D5E0E3;
+}
+
+.myBody {
+	background-color: white;
+	background-image: url("./../img/pay3.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 100px;
+	
+}
+
+.principalPanel {
+	background-color: rgba(130, 180, 255, 0.75);
+	margin: 0px;
+	padding: 0px;
+}
+
+.finMenu {
+	width:600px;
+}
+
+.truc {
+	background-color: white;
+	max-width: 1000px;
+}
+
+.myColor {
+	background-color: white;
+}

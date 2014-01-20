@@ -84,7 +84,7 @@
 			<div class="panel callout radius">
 				<h2>New Contact</h2>
 				<br />
-				<form data-abide action="CreateContactServlet" method="post">
+				<form data-abide action="servlet/CreateContactServlet" method="post">
 					<div class="input-wrapper">
 						<label for="idfirstname">Firstname</label> <input type="text"
 							name="firstname" id="idfirstname" required/>

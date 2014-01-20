@@ -2,10 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -13,8 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import session.*;
-import entity.*;
+import session.IDAOContactLocal;
+import entity.Address;
+import entity.Contact;
+import entity.ContactGroup;
+import entity.Entreprise;
+import entity.PhoneNumber;
 
 /**
  * Servlet implementation class CreateContactServlet
@@ -24,7 +25,13 @@ public class CreateContactServlet extends HttpServlet {
 	
 
 	@EJB(name="DAOContact")
-	private IDAOContactLocal dao;	
+	private IDAOContactLocal dao;
+	
+	//@EJB(name="Entreprise")
+	//private Entreprise entreprise;
+	
+	//@EJB(name="Contact")
+	//private Contact contact;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,13 +51,11 @@ public class CreateContactServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//ApplicationContext applicationContext = new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml"});
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		Contact c = null;
 		
 		if (request.getParameter("entreprise") != null) {
-			Entreprise e = (Entreprise) context.getBean("beanEntreprise");
+			Entreprise e = new Entreprise();// entreprise;
 			try {
 				e.setNumSiret(Integer.parseInt(request.getParameter("numSiret")));
 			} catch (NumberFormatException nfe) {
@@ -59,7 +64,7 @@ public class CreateContactServlet extends HttpServlet {
 			}
 			c = e;
 		} else {
-			c = (Contact) context.getBean("beanContact");
+			c = new Contact();//contact;
 		}
 		
 		c.setFirstname(request.getParameter("firstname"));
@@ -87,7 +92,7 @@ public class CreateContactServlet extends HttpServlet {
 			//ContactGroup cg = ((DAOContactGroup) context.getBean("beanDAOContactGroup")).searchContactGroup(groups.get(i));
 			ContactGroup cg = null;
 			if (cg == null) {
-				cg = (ContactGroup) context.getBean("beanContactGroup");
+				cg = new ContactGroup();//(ContactGroup) context.getBean("beanContactGroup");
 				cg.setGroupName(groups.get(i));
 			}
 			contactGroups.add(cg);
@@ -95,19 +100,19 @@ public class CreateContactServlet extends HttpServlet {
 		c.setBooks(contactGroups);
 			
 		if (request.getParameter("homephone") != null) {
-			PhoneNumber pn = (PhoneNumber) context.getBean("beanPhoneNumber");			
+			PhoneNumber pn = new PhoneNumber();// (PhoneNumber) context.getBean("beanPhoneNumber");			
 			pn.setPhoneNumber(request.getParameter("homephone"));
 			pn.setPhoneKind("homephone");
 			c.getPhones().add(pn);
 		}
 		if (request.getParameter("officephone") != null) {
-			PhoneNumber pn = (PhoneNumber) context.getBean("beanPhoneNumber");
+			PhoneNumber pn = new PhoneNumber();//(PhoneNumber) context.getBean("beanPhoneNumber");
 			pn.setPhoneNumber(request.getParameter("officephone"));
 			pn.setPhoneKind("officephone");
 			c.getPhones().add(pn);
 		}
 		if (request.getParameter("cellphone") != null) {
-			PhoneNumber pn = (PhoneNumber) context.getBean("beanPhoneNumber");
+			PhoneNumber pn = new PhoneNumber();//(PhoneNumber) context.getBean("beanPhoneNumber");
 			pn.setPhoneNumber(request.getParameter("cellphone"));
 			pn.setPhoneKind("cellphone");
 			c.getPhones().add(pn);

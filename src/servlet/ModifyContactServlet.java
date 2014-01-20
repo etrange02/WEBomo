@@ -125,8 +125,7 @@ public class ModifyContactServlet extends HttpServlet {
 			return;
 		ContactGroup cg = daoGroup.searchContactGroup(name);
 		if (cg == null) {
-			System.out.println("CG NULL !");
-			cg = (ContactGroup) context.getBean("beanContactGroup");
+			cg = new ContactGroup();//(ContactGroup) context.getBean("beanContactGroup");
 			cg.setGroupName(name);
 			daoGroup.createContactGroup(cg);
 		}

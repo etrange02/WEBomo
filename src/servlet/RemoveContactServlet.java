@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import session.DAOContact;
-import entity.*;
+import session.IDAOContactLocal;
+import entity.Contact;
 
 
 /**
