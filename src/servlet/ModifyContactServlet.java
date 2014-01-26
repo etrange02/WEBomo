@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import session.IDAOContactGroupRemote;
 import session.IDAOContactRemote;
+import session.IDAOPhoneNumberRemote;
 import entity.Contact;
 import entity.ContactGroup;
 import entity.PhoneNumber;
@@ -127,7 +130,20 @@ public class ModifyContactServlet extends HttpServlet {
 		if (request.getParameter("famille") != null)	
 			checkContactGroup(contact, "famille");
 		else
-			uncheckContactGroup(contact, "famille");
+			uncheckContactGroup(contact, "famille");		
+
+		if (!request.getParameter("homephone").isEmpty())	
+			checkPhoneNumber(contact, "homephone", request.getParameter("homephone"));
+		else
+			uncheckPhoneNumber(contact, "homephone");
+		if (!request.getParameter("cellphone").isEmpty())	
+			checkPhoneNumber(contact, "cellphone", request.getParameter("cellphone"));
+		else
+			uncheckPhoneNumber(contact, "cellphone");
+		if (!request.getParameter("officephone").isEmpty())	
+			checkPhoneNumber(contact, "officephone", request.getParameter("officephone"));
+		else
+			uncheckPhoneNumber(contact, "officephone");
 				
 		dao.updateContact(contact);
 		
@@ -178,6 +194,59 @@ public class ModifyContactServlet extends HttpServlet {
 				return true;
 		}
 		return false;
+	}
+	
+	private void checkPhoneNumber(Contact contact, String name, String value)
+	{
+		IDAOPhoneNumberRemote dao = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOPhoneNumberRemote) context.lookup("DAOPhoneNumberBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+				
+		Iterator<PhoneNumber> iter = contact.getPhones().iterator();
+		while (iter.hasNext())
+		{
+			PhoneNumber pn = iter.next();
+			if (pn.getPhoneKind().equals(name))
+			{
+				pn.setPhoneNumber(value);
+				dao.update(pn);
+				return;
+			}
+		}
+		
+		PhoneNumber pn = new PhoneNumber();
+		pn.setContact(contact);
+		pn.setPhoneKind(name);
+		pn.setPhoneNumber(value);
+		dao.create(pn);
+	}
+	
+	private void uncheckPhoneNumber(Contact contact, String name)
+	{
+		IDAOPhoneNumberRemote dao = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOPhoneNumberRemote) context.lookup("DAOPhoneNumberBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+				
+		Iterator<PhoneNumber> iter = contact.getPhones().iterator();
+		while (iter.hasNext())
+		{
+			PhoneNumber pn = iter.next();
+			if (pn.getPhoneKind().equals(name))
+			{
+				contact.getPhones().remove(pn);
+				pn.setContact(null);
+				dao.remove(pn);
+				return;
+			}
+		}
 	}
 
 }
