@@ -59,7 +59,7 @@ public class SearchContactServlet extends HttpServlet {
 		
 		if (request.getParameter("criteria").isEmpty()) {
 			
-			lc = dao.GetAllContacts();
+			lc = dao.getAllContacts();
 		} else {
 			List<Contact> lc1 = dao.searchContactByName(request.getParameter("criteria"));		
 			List<Contact> lc2 = dao.searchContactByPhone(request.getParameter("criteria"));
