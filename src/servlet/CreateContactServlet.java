@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import session.IDAOContactLocal;
+import session.IDAOContactGroupRemote;
+import session.IDAOContactRemote;
 import entity.Address;
 import entity.Contact;
 import entity.ContactGroup;
@@ -24,28 +27,20 @@ public class CreateContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 
-	@EJB(name="DAOContactBean")
-	private IDAOContactLocal dao;
-	
-	//@EJB(name="Entreprise")
-	//private Entreprise entreprise;
-	
-	//@EJB(name="Contact")
-	//private Contact contact;
+	/*@EJB(name="DAOContactBean")
+	private IDAOContactLocal dao;*/
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public CreateContactServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -53,6 +48,16 @@ public class CreateContactServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		Contact c = null;
+		
+		IDAOContactRemote dao = null;
+		IDAOContactGroupRemote daoGroup = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+			daoGroup = (IDAOContactGroupRemote) context.lookup("DAOContactGroupBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 		
 		if (request.getParameter("entreprise") != null) {
 			Entreprise e = new Entreprise();// entreprise;
@@ -89,10 +94,9 @@ public class CreateContactServlet extends HttpServlet {
 			groups.add("famille");
 		
 		for (int i = 0; i<groups.size(); ++i) {
-			//ContactGroup cg = ((DAOContactGroup) context.getBean("beanDAOContactGroup")).searchContactGroup(groups.get(i));
-			ContactGroup cg = null;
+			ContactGroup cg = daoGroup.searchContactGroup(groups.get(i));
 			if (cg == null) {
-				cg = new ContactGroup();//(ContactGroup) context.getBean("beanContactGroup");
+				cg = new ContactGroup();
 				cg.setGroupName(groups.get(i));
 			}
 			contactGroups.add(cg);
@@ -100,19 +104,19 @@ public class CreateContactServlet extends HttpServlet {
 		c.setBooks(contactGroups);
 			
 		if (request.getParameter("homephone") != null) {
-			PhoneNumber pn = new PhoneNumber();// (PhoneNumber) context.getBean("beanPhoneNumber");			
+			PhoneNumber pn = new PhoneNumber();	
 			pn.setPhoneNumber(request.getParameter("homephone"));
 			pn.setPhoneKind("homephone");
 			c.getPhones().add(pn);
 		}
 		if (request.getParameter("officephone") != null) {
-			PhoneNumber pn = new PhoneNumber();//(PhoneNumber) context.getBean("beanPhoneNumber");
+			PhoneNumber pn = new PhoneNumber();
 			pn.setPhoneNumber(request.getParameter("officephone"));
 			pn.setPhoneKind("officephone");
 			c.getPhones().add(pn);
 		}
 		if (request.getParameter("cellphone") != null) {
-			PhoneNumber pn = new PhoneNumber();//(PhoneNumber) context.getBean("beanPhoneNumber");
+			PhoneNumber pn = new PhoneNumber();
 			pn.setPhoneNumber(request.getParameter("cellphone"));
 			pn.setPhoneKind("cellphone");
 			c.getPhones().add(pn);

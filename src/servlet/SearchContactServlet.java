@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import session.IDAOContactLocal;
+import session.IDAOContactRemote;
 import entity.Contact;
 import entity.ContactGroup;
 
@@ -26,8 +25,8 @@ import entity.ContactGroup;
 public class SearchContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	@EJB(name="DAOContactBean")
-	private IDAOContactLocal dao;
+	/*@EJB(name="DAOContactBean")
+	private IDAOContactRemote dao;*/
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -50,15 +49,16 @@ public class SearchContactServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Contact> lc = new ArrayList<Contact>();
 		
+		IDAOContactRemote dao = null;
+		try {
+		Context context = new InitialContext();
+			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
 		if (request.getParameter("criteria").isEmpty()) {
-			Context context = null;
-			try {
-				context = new InitialContext();
-			dao = (IDAOContactLocal) context.lookup("DAOContactBean");
-			} catch (NamingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			lc = dao.GetAllContacts();
 		} else {
 			List<Contact> lc1 = dao.searchContactByName(request.getParameter("criteria"));		

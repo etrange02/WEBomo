@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entity.*;
-import session.*;
+import session.IDAOContactGroupRemote;
+import session.IDAOContactRemote;
+import entity.Contact;
+import entity.ContactGroup;
+import entity.PhoneNumber;
 
 /**
  * Servlet implementation class ModifyContactServlet
@@ -20,26 +25,30 @@ import session.*;
 public class ModifyContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	@EJB(name="DAOContactBean")
-	private IDAOContactLocal dao;
+	/*@EJB(name="DAOContactBean")
+	private IDAOContactLocal dao;*/
 	
-	@EJB(name="DAOContactGroupBean")
-	private IDAOContactGroupLocal daoGroup;
+	/*@EJB(name="DAOContactGroupBean")
+	private IDAOContactGroupLocal daoGroup;*/
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ModifyContactServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		//DAOContact dao = (DAOContact) context.getBean("beanDAOContact");
+		IDAOContactRemote dao = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 		
 		int id = -1;
 		try {
@@ -84,6 +93,14 @@ public class ModifyContactServlet extends HttpServlet {
 		//ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		//DAOContact dao = (DAOContact) context.getBean("beanDAOContact");
 		
+		IDAOContactRemote dao = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
 		int id = -1;
 		try {
 			id = Integer.parseInt(request.getParameter("id"));
@@ -123,6 +140,15 @@ public class ModifyContactServlet extends HttpServlet {
 	private void checkContactGroup(Contact contact, String name) {
 		if (containsGroup(contact.getBooks(), name))
 			return;
+		
+		IDAOContactGroupRemote daoGroup = null;
+		try {
+			Context context = new InitialContext();
+			daoGroup = (IDAOContactGroupRemote) context.lookup("DAOContactGroupBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
 		ContactGroup cg = daoGroup.searchContactGroup(name);
 		if (cg == null) {
 			cg = new ContactGroup();//(ContactGroup) context.getBean("beanContactGroup");

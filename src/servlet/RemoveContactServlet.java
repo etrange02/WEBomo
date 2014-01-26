@@ -2,14 +2,16 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.ejb.EJB;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import session.IDAOContactLocal;
+import session.IDAOContactRemote;
 import entity.Contact;
 
 
@@ -19,8 +21,8 @@ import entity.Contact;
 public class RemoveContactServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	@EJB(name="DAOContactBean")
-	private IDAOContactLocal dao;
+	/*@EJB(name="DAOContactBean")
+	private IDAOContactLocal dao;*/
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,6 +43,15 @@ public class RemoveContactServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			id = -1;
 		}
+		
+		IDAOContactRemote dao = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
 		Contact contact = dao.searchContact(id);
 		
 		RequestDispatcher jsp = request.getRequestDispatcher("/RemoveContact.jsp");
@@ -58,6 +69,15 @@ public class RemoveContactServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			id = -1;
 		}
+		
+		IDAOContactRemote dao = null;
+		try {
+			Context context = new InitialContext();
+			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		
 		dao.removeContact(id);
 		response.sendRedirect("Menu.jsp");
 	}
