@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.naming.Context;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import session.IDAOContactGroupRemote;
 import session.IDAOContactRemote;
 import entity.Contact;
 import entity.ContactGroup;
@@ -33,14 +33,12 @@ public class SearchContactServlet extends HttpServlet {
      */
     public SearchContactServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -50,9 +48,11 @@ public class SearchContactServlet extends HttpServlet {
 		List<Contact> lc = new ArrayList<Contact>();
 		
 		IDAOContactRemote dao = null;
+		IDAOContactGroupRemote daoGroup = null;
 		try {
 		Context context = new InitialContext();
-			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		dao = (IDAOContactRemote) context.lookup("DAOContactBean");
+		daoGroup = (IDAOContactGroupRemote) context.lookup("DAOContactGroupBean");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
@@ -63,17 +63,14 @@ public class SearchContactServlet extends HttpServlet {
 		} else {
 			List<Contact> lc1 = dao.searchContactByName(request.getParameter("criteria"));		
 			List<Contact> lc2 = dao.searchContactByPhone(request.getParameter("criteria"));
-			List<ContactGroup> lg = dao.searchGroupByName(request.getParameter("criteria"));
+			ContactGroup cg = daoGroup.searchContactGroup(request.getParameter("criteria"));
 			
 			if (lc1 != null)
 				lc.addAll(lc1);
 			if (lc2 != null)
 				lc.addAll(lc2);
-			if (lg != null) {
-				Iterator<ContactGroup> iter = lg.iterator();
-				while (iter.hasNext())
-					lc.addAll(iter.next().getContacts());
-			}
+			if (cg != null)
+				lc.addAll(cg.getContacts());
 		}
 		
 		RequestDispatcher jsp = request.getRequestDispatcher("/SearchContact.jsp");

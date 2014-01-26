@@ -90,8 +90,6 @@ public class ModifyContactServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		//DAOContact dao = (DAOContact) context.getBean("beanDAOContact");
 		
 		IDAOContactRemote dao = null;
 		try {
@@ -130,7 +128,7 @@ public class ModifyContactServlet extends HttpServlet {
 			checkContactGroup(contact, "famille");
 		else
 			uncheckContactGroup(contact, "famille");
-		
+				
 		dao.updateContact(contact);
 		
 		//response.sendRedirect("ModifyContact.jsp?id=" + request.getParameter("id"));

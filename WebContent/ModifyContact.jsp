@@ -81,37 +81,37 @@
 				<h2>Modifier un contact</h2>
 				<br />
 				<form data-abide action="ModifyContactServlet" method="post">
-					<input type="hidden" name="id" value="${ contact.getId() }" />
+					<input type="hidden" name="id" value="<% Contact c = (Contact) request.getAttribute("contact"); out.print(c.getId()); %>" />
 						<div class="input-wrapper">
 						<label for="idfirstname">Firstname</label> <input type="text"
-							name="firstname" id="idfirstname" value="${ contact.getFirstname() }" required/>
+							name="firstname" id="idfirstname" value="<% out.print(c.getFirstname()); %>" required/>
 							<small class="error">Firstname is required.</small>
 					</div>
 					<div class="input-wrapper">
 						<label for="idlastname">Lastname</label> <input type="text"
-							name="lastname" id="idlastname" value="${ contact.getLastname() }"  required/>
+							name="lastname" id="idlastname" value="<% out.print(c.getLastname()); %>"  required/>
 							<small class="error">Lastname is required.</small>
 					</div>
                         <div class="input-wrapper">
                         <label for="idemail">Email</label> <input type="email" name="email"
-                            id="idemail" value="${ contact.getEmail() }"/>
+                            id="idemail" value="<% out.print(c.getEmail()); %>"/>
                             <small class="error">Email invalid.</small>
                     </div>
                         <div class="input-wrapper">
                         <label for="idstreet">Street</label> <input type="text" name="street"
-                            id="idstreet" value="${ address.getStreet() }"/>
+                            id="idstreet" value="<% out.print(c.getAddress().getStreet()); %>"/>
                     </div>
                         <div class="input-wrapper">
                         <label for="idcity">City</label> <input type="text" name="city"
-                            id="idcity" value="${ address.getCity() }"/>
+                            id="idcity" value="<% out.print(c.getAddress().getCity()); %>"/>
                     </div>
                         <div class="input-wrapper">
                         <label for="idzip">Zip</label> <input type="text" name="zip"
-                            id="idzip" value="${ address.getZip() }"/>
+                            id="idzip" value="<% out.print(c.getAddress().getZip()); %>"/>
                     </div>
                         <div class="input-wrapper">
                         <label for="idcountry">Country</label> <input type="text" name="country"
-                            id="idcountry" value="${ address.getCountry() }"/>
+                            id="idcountry" value="<% out.print(c.getAddress().getCountry()); %>"/>
                     </div>
                     <dl class="accordion" data-accordion>
                         <dd>

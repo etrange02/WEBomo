@@ -2,7 +2,10 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -103,24 +106,32 @@ public class CreateContactServlet extends HttpServlet {
 		}
 		c.setBooks(contactGroups);
 			
-		if (request.getParameter("homephone") != null) {
+		List<PhoneNumber> pns = new ArrayList<PhoneNumber>();
+		if (request.getParameter("homephone") != null && !request.getParameter("homephone").isEmpty()) {
 			PhoneNumber pn = new PhoneNumber();	
 			pn.setPhoneNumber(request.getParameter("homephone"));
 			pn.setPhoneKind("homephone");
-			c.getPhones().add(pn);
+			pn.setContact(c);
+			pns.add(pn);
+			System.out.println(pn.getPhoneKind() + "-" + pn.getPhoneNumber());
 		}
-		if (request.getParameter("officephone") != null) {
+		if (request.getParameter("officephone") != null && !request.getParameter("officephone").isEmpty()) {
 			PhoneNumber pn = new PhoneNumber();
 			pn.setPhoneNumber(request.getParameter("officephone"));
 			pn.setPhoneKind("officephone");
-			c.getPhones().add(pn);
+			pn.setContact(c);
+			pns.add(pn);
+			System.out.println(pn.getPhoneKind() + "-" + pn.getPhoneNumber());
 		}
-		if (request.getParameter("cellphone") != null) {
+		if (request.getParameter("cellphone") != null && !request.getParameter("cellphone").isEmpty()) {
 			PhoneNumber pn = new PhoneNumber();
 			pn.setPhoneNumber(request.getParameter("cellphone"));
 			pn.setPhoneKind("cellphone");
-			c.getPhones().add(pn);
+			pn.setContact(c);
+			pns.add(pn);
+			System.out.println(pn.getPhoneKind() + "-" + pn.getPhoneNumber());
 		}
+		c.setPhones(pns);
 		
 		dao.createContact(c);
 		response.sendRedirect("CreateContact.jsp");
