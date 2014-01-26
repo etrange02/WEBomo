@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import session.IDAOContactGroupRemote;
 import session.IDAOContactRemote;
 import session.IDAOPhoneNumberRemote;

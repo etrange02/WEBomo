@@ -23,6 +23,10 @@
   <servlet-name>SearchContactServlet</servlet-name>
   <servlet-class>servlet.SearchContactServlet</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>PopulateServlet</servlet-name>
+  <servlet-class>servlet.PopulateServlet</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>CreateContactServlet</servlet-name>
   <url-pattern>/CreateContactServlet</url-pattern>
@@ -42,6 +46,10 @@
  <servlet-mapping>
   <servlet-name>SearchContactServlet</servlet-name>
   <url-pattern>/SearchContactServlet</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>PopulateServlet</servlet-name>
+  <url-pattern>/PopulateServlet</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>index.html</welcome-file>

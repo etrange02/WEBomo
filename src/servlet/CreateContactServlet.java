@@ -2,10 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import session.IDAOContactGroupRemote;
 import session.IDAOContactRemote;
-import session.IDAOPhoneNumberRemote;
 import entity.Address;
 import entity.Contact;
 import entity.ContactGroup;
@@ -55,7 +51,6 @@ public class CreateContactServlet extends HttpServlet {
 		
 		IDAOContactRemote dao = null;
 		IDAOContactGroupRemote daoGroup = null;
-		IDAOPhoneNumberRemote daoPhone = null;
 		try {
 			Context context = new InitialContext();
 			dao = (IDAOContactRemote) context.lookup("DAOContactBean");
